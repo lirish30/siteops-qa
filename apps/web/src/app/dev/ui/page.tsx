@@ -1,5 +1,6 @@
 "use client";
 
+import { notFound } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -115,6 +116,8 @@ function Playground() {
 }
 
 export default function DevUiPage() {
+  // Dev-only playground — never served in production builds.
+  if (process.env.NODE_ENV === "production") notFound();
   return (
     <ToastProvider>
       <Playground />

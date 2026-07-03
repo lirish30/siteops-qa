@@ -31,7 +31,10 @@
       "Bash(git checkout *)",
       "Bash(git commit *)",
       "Bash(git add *)",
-      "Bash(git commit -q -m 'Phase 0: foundation & setup — monorepo, schema, RLS, auth, app shell, worker, UI tokens, CI *)"
+      "Bash(git commit -q -m 'Phase 0: foundation & setup — monorepo, schema, RLS, auth, app shell, worker, UI tokens, CI *)",
+      "Skill(code-review)",
+      "Skill(code-review:*)",
+      "Bash(python3 -)"
     ]
   }
 }
