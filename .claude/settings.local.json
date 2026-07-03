@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:docs.google.com)",
+      "WebFetch(domain:doc-0s-8g-docstext.googleusercontent.com)",
+      "Bash(curl -sL \"https://docs.google.com/document/d/17GO7gJO7EYsoN1stjmEz3GQPILZ7ilk6PotpTcjXljA/export?format=txt\" -o \"/private/tmp/claude-501/-Users-loganirish-Project-Sites-siteops/0a1791e2-ff80-4c76-9f68-e427893f84f3/scratchpad/prd-source.txt\")",
+      "Bash(ls /Users/loganirish/.claude/skills/product-planner/resources/)",
+      "WebFetch(domain:www.billow.so)",
+      "Bash(grep -n \"^#\\\\{1,3\\\\} \" \"/Users/loganirish/Project Sites/siteops/docs/prd.md\")",
+      "Bash(npm -v)",
+      "Bash(git init *)",
+      "Bash(mkdir -p apps packages)",
+      "Bash(npx --yes create-next-app@latest apps/web --ts --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-turbopack --use-npm --skip-install --disable-git)",
+      "Bash(npm install *)",
+      "Bash(sed -i '' 's/\"@sentry\\\\/nextjs\": \"\\\\^9.0.0\"/\"@sentry\\\\/nextjs\": \"^10.0.0\"/' apps/web/package.json)",
+      "Bash(sed -i '' 's/\"@sentry\\\\/node\": \"\\\\^9.0.0\"/\"@sentry\\\\/node\": \"^10.0.0\"/' apps/worker/package.json)",
+      "Bash(supabase --version)",
+      "Read(//Users/loganirish/**)",
+      "Bash(env)",
+      "Bash(npx --yes supabase init --force)",
+      "Bash(docker info *)",
+      "Bash(npx supabase *)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(d.get\\('ANON_KEY',''\\)[:60]\\); print\\(d.get\\('API_URL'\\) or d.get\\('REST_URL'\\)\\)\")",
+      "Bash(docker exec *)",
+      "Bash(npm run *)",
+      "Bash(npm ls *)",
+      "Bash(echo \"exit-status: $?\")",
+      "Bash(npx vitest *)",
+      "Bash(curl -s \"http://localhost:8288/v1/events/01KWJYG7EY53HYV6KQ3JN0V3A3/runs\")",
+      "Bash(python3 -m json.tool)",
+      "Bash(git checkout *)",
+      "Bash(git commit *)",
+      "Bash(git add *)",
+      "Bash(git commit -q -m 'Phase 0: foundation & setup — monorepo, schema, RLS, auth, app shell, worker, UI tokens, CI *)",
+      "Skill(code-review)",
+      "Skill(code-review:*)",
+      "Bash(python3 -)"
+    ]
+  }
+}

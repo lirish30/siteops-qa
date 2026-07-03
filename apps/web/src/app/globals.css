@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+/* Design tokens from docs/design.md — the palette is closed; never add hues.
+   Severity colors are functionally reserved: never decorative. */
+@theme {
+  --color-primary: #2b47f0;
+  --color-primary-hover: #1e35c7;
+  --color-primary-subtle: #ebeefe;
+  --color-on-primary: #ffffff;
+  --color-background: #f5f6fa;
+  --color-surface: #ffffff;
+  --color-surface-sunken: #eff1f7;
+  --color-on-surface: #16181d;
+  --color-on-surface-secondary: #6c7280;
+  --color-on-surface-muted: #9aa0ae;
+  --color-border: #e5e8f0;
+  --color-border-strong: #cdd2e0;
+  --color-focus-ring: #93a5f8;
+  --color-severity-critical: #dc2626;
+  --color-severity-critical-subtle: #fdecec;
+  --color-severity-high: #ea580c;
+  --color-severity-high-subtle: #fdf0e7;
+  --color-severity-medium: #b45309;
+  --color-severity-medium-subtle: #fbf3e4;
+  --color-severity-low: #64748b;
+  --color-severity-low-subtle: #eef1f5;
+  --color-severity-info: #0e7490;
+  --color-severity-info-subtle: #e6f4f8;
+  --color-severity-pass: #15803d;
+  --color-severity-pass-subtle: #e9f6ee;
+  --color-on-severity: #ffffff;
+
+  --font-sans: var(--font-inter), Inter, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 999px;
+
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 24px;
+  --spacing-6: 32px;
+  --spacing-7: 48px;
+  --spacing-8: 64px;
+
+  --shadow-card: 0 1px 2px rgba(22, 24, 29, 0.05);
+  --shadow-overlay: 0 8px 30px rgba(22, 24, 29, 0.12);
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-on-surface);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 1px;
+}
