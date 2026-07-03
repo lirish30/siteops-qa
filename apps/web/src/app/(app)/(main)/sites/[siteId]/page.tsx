@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Card } from "@/components/ui/card";
@@ -18,23 +19,61 @@ export default async function SiteOverviewPage({
   const { data: site } = await supabase
     .from("sites")
     .select(
-      "id, url, name, wp_detection, monitored_pages ( id, url, label, page_type, importance, is_active, baselines ( id, is_current ) )"
+      "id, url, name, wp_detection, monitored_pages ( id, url, label, page_type, importance, is_active, baselines ( id, is_current, status ) )"
     )
     .eq("id", siteId)
     .maybeSingle();
 
   if (!site) notFound();
 
+  // Latest baseline run — drives the progress card while queued/running and
+  // keeps failed runs visible for retry.
+  const { data: latestBaselineScan } = await supabase
+    .from("scans")
+    .select("id, status")
+    .eq("site_id", siteId)
+    .eq("trigger_type", "baseline")
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
   const activePages = site.monitored_pages.filter((p) => p.is_active);
   const hasBaseline = activePages.some((p) =>
-    p.baselines.some((b) => b.is_current)
+    p.baselines.some((b) => b.is_current && b.status === "complete")
   );
+  const runInProgressOrFailed =
+    latestBaselineScan &&
+    ["queued", "running", "failed"].includes(latestBaselineScan.status);
 
   return (
     <main className="flex flex-col gap-5">
       <SiteHeader site={site} hasBaseline={hasBaseline} />
 
-      {!hasBaseline && <BaselineStatusCard siteId={site.id} />}
+      {(!hasBaseline || runInProgressOrFailed) && (
+        <BaselineStatusCard
+          siteId={site.id}
+          initialScanId={runInProgressOrFailed ? latestBaselineScan.id : null}
+          hasBaseline={hasBaseline}
+        />
+      )}
+
+      {hasBaseline && (
+        <Card className="flex items-center justify-between gap-3 py-4">
+          <div>
+            <p className="text-sm font-semibold">Baseline ready</p>
+            <p className="text-xs text-on-surface-secondary">
+              Review captured screenshots, forms, and CTAs — and mark regions to
+              ignore in future comparisons.
+            </p>
+          </div>
+          <Link
+            href={`/sites/${site.id}/baseline`}
+            className="shrink-0 text-sm font-medium text-primary hover:underline"
+          >
+            View baseline
+          </Link>
+        </Card>
+      )}
 
       <section className="flex flex-col gap-2">
         <h2 className="text-sm font-semibold text-on-surface-secondary">

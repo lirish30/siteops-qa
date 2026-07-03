@@ -20,6 +20,15 @@ Steps the coding agent cannot do for you (dashboard work, credentials). Work top
    - Redirect URLs: add `http://localhost:3000/auth/callback`
 6. SMTP via Resend (Dashboard → Project Settings → Auth → SMTP): host `smtp.resend.com`, user `resend`, password = your Resend API key, sender = an address on your verified domain. Until this is done, Supabase's built-in email works but is rate-limited (fine for dev).
 
+## 1b. Phase 2 migration (blocks: baseline runs)
+The coding agent has no Supabase access token, so run once:
+```sh
+npx supabase db push   # applies 0003_scan_engine.sql (baselines.scan_id + RPCs)
+```
+The `screenshots` storage bucket was already created via the API; the
+migration's bucket insert is idempotent (`on conflict do nothing`).
+Until this is pushed, "Create baseline" runs will fail at the database step.
+
 ## 2. Inngest (blocks: worker jobs)
 1. Create an account at [inngest.com](https://www.inngest.com) → create app `siteops-qa`.
 2. Copy the Event Key → `INNGEST_EVENT_KEY` and Signing Key → `INNGEST_SIGNING_KEY` (web env and worker env).
