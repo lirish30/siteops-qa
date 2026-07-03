@@ -1,3 +1,4 @@
+import { fileURLToPath } from "node:url";
 import { defineWorkspace } from "vitest/config";
 
 export default defineWorkspace([
@@ -9,6 +10,11 @@ export default defineWorkspace([
     },
   },
   {
+    resolve: {
+      alias: {
+        "@": fileURLToPath(new URL("./apps/web/src", import.meta.url)),
+      },
+    },
     test: {
       name: "web",
       include: ["apps/web/src/**/*.test.ts"],
