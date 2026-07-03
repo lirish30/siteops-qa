@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SiteOps QA — Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* colors */
+  --color-primary:#2B47F0;
+  --color-primary-hover:#1E35C7;
+  --color-primary-subtle:#EBEEFE;
+  --color-on-primary:#FFFFFF;
+  --color-background:#F5F6FA;
+  --color-surface:#FFFFFF;
+  --color-surface-sunken:#EFF1F7;
+  --color-on-surface:#16181D;
+  --color-on-surface-secondary:#6C7280;
+  --color-on-surface-muted:#9AA0AE;
+  --color-border:#E5E8F0;
+  --color-border-strong:#CDD2E0;
+  --color-focus-ring:#93A5F8;
+  --color-severity-critical:#DC2626;
+  --color-severity-critical-subtle:#FDECEC;
+  --color-severity-high:#EA580C;
+  --color-severity-high-subtle:#FDF0E7;
+  --color-severity-medium:#B45309;
+  --color-severity-medium-subtle:#FBF3E4;
+  --color-severity-low:#64748B;
+  --color-severity-low-subtle:#EEF1F5;
+  --color-severity-info:#0E7490;
+  --color-severity-info-subtle:#E6F4F8;
+  --color-severity-pass:#15803D;
+  --color-severity-pass-subtle:#E9F6EE;
+  --color-on-severity:#FFFFFF;
+  /* typography */
+  --font-sans:Inter,system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,monospace;
+  --type-display:700 32px/1.15 var(--font-sans);
+  --type-display-ls:-0.02em;
+  --type-h1:600 24px/1.25 var(--font-sans);
+  --type-h1-ls:-0.01em;
+  --type-h2:600 18px/1.3 var(--font-sans);
+  --type-h2-ls:-0.01em;
+  --type-h3:600 15px/1.4 var(--font-sans);
+  --type-body:400 14px/1.55 var(--font-sans);
+  --type-body-strong:600 14px/1.55 var(--font-sans);
+  --type-caption:500 12px/1.4 var(--font-sans);
+  --type-caption-ls:0.01em;
+  --type-stat:700 28px/1.1 var(--font-sans);
+  --type-stat-ls:-0.02em;
+  --type-mono:400 13px/1.5 var(--font-mono);
+  /* rounded */
+  --rounded-sm:6px;
+  --rounded-md:10px;
+  --rounded-lg:16px;
+  --rounded-full:999px;
+  /* spacing */
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px;
+  --space-5:24px; --space-6:32px; --space-7:48px; --space-8:64px;
+  /* elevation */
+  --shadow-card:0 1px 2px rgba(22,24,29,0.05);
+  --shadow-overlay:0 8px 30px rgba(22,24,29,0.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:var(--type-body);color:var(--color-on-surface);background:var(--color-background);padding:var(--space-7) var(--space-5)}
+.page{max-width:1080px;margin:0 auto}
+header.guide{margin-bottom:var(--space-7)}
+header.guide h1{font:var(--type-display);letter-spacing:var(--type-display-ls);margin-bottom:var(--space-2)}
+header.guide p{color:var(--color-on-surface-secondary);max-width:640px}
+header.guide .mirror-note{font:var(--type-caption);letter-spacing:var(--type-caption-ls);color:var(--color-on-surface-muted);margin-top:var(--space-3)}
+section{margin-bottom:var(--space-7)}
+section>h2{font:var(--type-h1);letter-spacing:var(--type-h1-ls);margin-bottom:var(--space-2);padding-bottom:var(--space-3);border-bottom:1px solid var(--color-border)}
+section>p.intro{color:var(--color-on-surface-secondary);margin-bottom:var(--space-5);max-width:680px}
+.grid{display:grid;gap:var(--space-4)}
+.grid.swatches{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+.swatch{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--rounded-md);overflow:hidden;box-shadow:var(--shadow-card)}
+.swatch .chipblock{height:72px;display:flex;align-items:center;justify-content:center;font:var(--type-caption)}
+.swatch .meta{padding:var(--space-3)}
+.swatch .meta .name{font:var(--type-caption);letter-spacing:var(--type-caption-ls);color:var(--color-on-surface)}
+.swatch .meta .hex{font:var(--type-mono);color:var(--color-on-surface-muted)}
+.group-label{font:var(--type-h3);color:var(--color-on-surface-secondary);margin:var(--space-5) 0 var(--space-3)}
+.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--rounded-lg);padding:var(--space-5);box-shadow:var(--shadow-card)}
+.spec-row{display:flex;align-items:baseline;gap:var(--space-5);padding:var(--space-4) 0;border-bottom:1px solid var(--color-border)}
+.spec-row:last-child{border-bottom:none}
+.spec-row .label{width:170px;flex-shrink:0}
+.spec-row .label .tok{font:var(--type-caption);letter-spacing:var(--type-caption-ls);color:var(--color-on-surface)}
+.spec-row .label .val{font:var(--type-mono);font-size:11px;color:var(--color-on-surface-muted)}
+.space-row{display:flex;align-items:center;gap:var(--space-4);margin-bottom:var(--space-3)}
+.space-row .tok{width:110px;font:var(--type-mono);color:var(--color-on-surface-secondary)}
+.space-bar{height:20px;background:var(--color-primary-subtle);border:1px solid var(--color-primary);border-radius:3px}
+.radius-grid{display:flex;gap:var(--space-5);flex-wrap:wrap}
+.radius-box{width:120px;height:88px;background:var(--color-surface);border:1px solid var(--color-border-strong);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:var(--space-1)}
+.radius-box .tok{font:var(--type-caption);color:var(--color-on-surface)}
+.radius-box .val{font:var(--type-mono);font-size:11px;color:var(--color-on-surface-muted)}
+.elev-grid{display:flex;gap:var(--space-5);flex-wrap:wrap}
+.elev-card{width:220px;padding:var(--space-4);background:var(--color-surface);border-radius:var(--rounded-lg)}
+.comp-block{margin-bottom:var(--space-5)}
+.comp-block h3{font:var(--type-h3);margin-bottom:var(--space-3)}
+.comp-row{display:flex;gap:var(--space-4);flex-wrap:wrap;align-items:center}
+.state-label{font:var(--type-caption);letter-spacing:var(--type-caption-ls);color:var(--color-on-surface-muted);display:block;margin-top:var(--space-2);text-align:center}
+/* components */
+.btn{font:var(--type-body-strong);border-radius:var(--rounded-md);padding:10px 18px;height:40px;border:none;cursor:pointer;display:inline-flex;align-items:center}
+.btn-primary{background:var(--color-primary);color:var(--color-on-primary)}
+.btn-primary:hover,.btn-primary.is-hover{background:var(--color-primary-hover)}
+.btn-primary:disabled{background:var(--color-border);color:var(--color-on-surface-muted);cursor:not-allowed}
+.btn-secondary{background:var(--color-surface);color:var(--color-on-surface);border:1px solid var(--color-border-strong)}
+.btn-secondary:hover,.btn-secondary.is-hover{background:var(--color-surface-sunken)}
+.btn:focus-visible,.input:focus-visible{outline:2px solid var(--color-focus-ring);outline-offset:2px}
+.input{font:var(--type-body);background:var(--color-surface);color:var(--color-on-surface);border:1px solid var(--color-border);border-radius:var(--rounded-md);padding:10px 14px;height:40px;width:260px}
+.input.is-focus{border-color:var(--color-focus-ring);outline:2px solid var(--color-focus-ring);outline-offset:0}
+.input.is-error{border-color:var(--color-severity-critical)}
+.input-error-msg{font:var(--type-caption);color:var(--color-severity-critical);margin-top:var(--space-1)}
+.badge{font:var(--type-caption);letter-spacing:var(--type-caption-ls);border-radius:var(--rounded-full);padding:3px 10px;display:inline-flex;align-items:center;gap:5px}
+.badge .dot{width:7px;height:7px;border-radius:var(--rounded-full);background:currentColor}
+.badge-critical{background:var(--color-severity-critical-subtle);color:var(--color-severity-critical)}
+.badge-high{background:var(--color-severity-high-subtle);color:var(--color-severity-high)}
+.badge-medium{background:var(--color-severity-medium-subtle);color:var(--color-severity-medium)}
+.badge-low{background:var(--color-severity-low-subtle);color:var(--color-severity-low)}
+.badge-info{background:var(--color-severity-info-subtle);color:var(--color-severity-info)}
+.badge-pass{background:var(--color-severity-pass-subtle);color:var(--color-severity-pass)}
+.banner{font:var(--type-h3);border-radius:var(--rounded-lg);padding:var(--space-4);display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-3)}
+.banner-pass{background:var(--color-severity-pass-subtle);color:var(--color-severity-pass)}
+.banner-review{background:var(--color-severity-medium-subtle);color:var(--color-severity-medium)}
+.banner-fail{background:var(--color-severity-critical-subtle);color:var(--color-severity-critical)}
+.nav-demo{width:220px;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--rounded-lg);padding:var(--space-3);box-shadow:var(--shadow-card)}
+.nav-item{font:var(--type-body-strong);color:var(--color-on-surface-secondary);border-radius:var(--rounded-md);padding:8px 12px;margin-bottom:var(--space-1);cursor:pointer}
+.nav-item:hover{background:var(--color-surface-sunken)}
+.nav-item.active{background:var(--color-primary-subtle);color:var(--color-primary)}
+.chip{font:var(--type-caption);letter-spacing:var(--type-caption-ls);background:var(--color-surface-sunken);color:var(--color-on-surface-secondary);border-radius:var(--rounded-full);padding:4px 12px;display:inline-block}
+.card-feature{background:var(--color-primary);color:var(--color-on-primary);border-radius:var(--rounded-lg);padding:var(--space-5);max-width:360px}
+.card-feature .cap{font:var(--type-caption);letter-spacing:var(--type-caption-ls);opacity:.8;margin-bottom:var(--space-2)}
+.card-feature .stat{font:var(--type-stat);letter-spacing:var(--type-stat-ls)}
+.report-doc{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--rounded-lg);padding:var(--space-6);max-width:560px;box-shadow:var(--shadow-card)}
+.report-doc h4{font:var(--type-h2);letter-spacing:var(--type-h2-ls);margin-bottom:var(--space-2)}
+.report-doc .date{font:var(--type-caption);color:var(--color-on-surface-muted);margin-bottom:var(--space-4)}
+.report-doc p{margin-bottom:var(--space-3)}
+.report-doc ul{list-style:none;margin-bottom:var(--space-3)}
+.report-doc li{padding:var(--space-1) 0;color:var(--color-on-surface-secondary)}
+.report-doc li::before{content:"✓ ";color:var(--color-severity-pass)}
+.report-doc .foot{font:var(--type-caption);color:var(--color-on-surface-muted);border-top:1px solid var(--color-border);padding-top:var(--space-3);margin-top:var(--space-4)}
+.mono-demo{font:var(--type-mono);background:var(--color-surface-sunken);border:1px solid var(--color-border);border-radius:var(--rounded-sm);padding:var(--space-3);color:var(--color-on-surface)}
+.dd-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-5)}
+.dd-col h3{font:var(--type-h3);margin-bottom:var(--space-3)}
+.dd-col ul{list-style:none}
+.dd-col li{padding:var(--space-2) 0;border-bottom:1px solid var(--color-border);color:var(--color-on-surface-secondary)}
+.dd-col.do li::before{content:"✓  ";color:var(--color-severity-pass);font-weight:600}
+.dd-col.dont li::before{content:"✗  ";color:var(--color-severity-critical);font-weight:600}
+@media (max-width:720px){.dd-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="guide">
+  <h1>SiteOps QA Design System</h1>
+  <p>Calm, evidence-based design system for a WordPress QA and reporting SaaS — fintech-clean surfaces, one working blue, and a strictly reserved severity ramp.</p>
+  <p class="mirror-note">This file is the human-readable mirror of <code>docs/design.md</code> (the source of truth for coding agents). They update together.</p>
+</header>
+
+<section id="colors">
+  <h2>Colors</h2>
+  <p class="intro">One brand blue does all interactive work. Neutrals carry the interface. Severity hues are functionally reserved — they never appear decoratively.</p>
+
+  <div class="group-label">Brand &amp; interactive</div>
+  <div class="grid swatches">
+    <div class="swatch"><div class="chipblock" style="background:var(--color-primary);color:var(--color-on-primary)">on-primary text</div><div class="meta"><div class="name">primary</div><div class="hex">#2B47F0</div></div></div>
+    <div class="swatch"><div class="chipblock" style="background:var(--color-primary-hover);color:var(--color-on-primary)">on-primary text</div><div class="meta"><div class="name">primary-hover</div><div class="hex">#1E35C7</div></div></div>
+    <div class="swatch"><div class="chipblock" style="background:var(--color-primary-subtle);color:var(--color-primary)">primary text</div><div class="meta"><div class="name">primary-subtle</div><div class="hex">#EBEEFE</div></div></div>
+    <div class="swatch"><div class="chipblock" style="background:var(--color-focus-ring);color:#16181D">focus outline</div><div class="meta"><div class="name">focus-ring</div><div class="hex">#93A5F8</div></div></div>
+  </div>
+
+  <div class="group-label">Neutrals</div>
+  <div class="grid swatches">
+    <div class="swatch"><div class="chipblock" style="background:var(--color-background);color:var(--color-on-surface)">page canvas</div><div class="meta"><div class="name">background</div><div class="hex">#F5F6FA</div></div></div>
+    <div class="swatch"><div class="chipblock" style="background:var(--color-surface);color:var(--color-on-surface);border-bottom:1px solid var(--color-border)">on-surface text</div><div class="meta"><div class="name">surface</div><div class="hex">#FFFFFF</div></div></div>
+    <div class="swatch"><div class="chipblock" style="background:var(--color-surface-sunken);color:var(--color-on-surface)">wells / insets</div><div class="meta"><div class="name">surface-sunken</div><div class="hex">#EFF1F7</div></div></div>
+    <div class="swatch"><div class="chipblock" style="background:var(--color-on-surface);color:#fff">primary text</div><div class="meta"><div class="name">on-surface</div><div class="hex">#16181D</div></div></div>
+    <div class="swatch"><div class="chipblock" style="background:var(--color-on-surface-secondary);color:#fff">secondary text</div><div class="meta"><div class="name">on-surface-secondary</div><div class="hex">#6C7280</div></div></div>
+    <div class="swatch"><div class="chipblock" style="background:var(--color-on-surface-muted);color:#16181D">muted text</div><div class="meta"><div class="name">on-surface-muted</div><div class="hex">#9AA0AE</div></div></div>
+    <div class="swatch"><div class="chipblock" style="background:var(--color-border);color:var(--color-on-surface)">hairlines</div><div class="meta"><div class="name">border</div><div class="hex">#E5E8F0</div></div></div>
+    <div class="swatch"><div class="chipblock" style="background:var(--color-border-strong);color:var(--color-on-surface)">strong border</div><div class="meta"><div class="name">border-strong</div><div class="hex">#CDD2E0</div></div></div>
+  </div>
+
+  <div class="group-label">Severity ramp (reserved)</div>
+  <div class="grid swatches">
+    <div class="swatch"><div class="chipblock" style="background:var(--color-severity-critical);color:var(--color-on-severity)">critical</div><div class="meta"><div class="name">severity-critical</div><div class="hex">#DC2626 · subtle #FDECEC</div></div></div>
+    <div class="swatch"><div class="chipblock" style="background:var(--color-severity-high);color:var(--color-on-severity)">high</div><div class="meta"><div class="name">severity-high</div><div class="hex">#EA580C · subtle #FDF0E7</div></div></div>
+    <div class="swatch"><div class="chipblock" style="background:var(--color-severity-medium);color:var(--color-on-severity)">medium</div><div class="meta"><div class="name">severity-medium</div><div class="hex">#B45309 · subtle #FBF3E4</div></div></div>
+    <div class="swatch"><div class="chipblock" style="background:var(--color-severity-low);color:var(--color-on-severity)">low</div><div class="meta"><div class="name">severity-low</div><div class="hex">#64748B · subtle #EEF1F5</div></div></div>
+    <div class="swatch"><div class="chipblock" style="background:var(--color-severity-info);color:var(--color-on-severity)">info</div><div class="meta"><div class="name">severity-info</div><div class="hex">#0E7490 · subtle #E6F4F8</div></div></div>
+    <div class="swatch"><div class="chipblock" style="background:var(--color-severity-pass);color:var(--color-on-severity)">pass</div><div class="meta"><div class="name">severity-pass</div><div class="hex">#15803D · subtle #E9F6EE</div></div></div>
+  </div>
+</section>
+
+<section id="typography">
+  <h2>Typography</h2>
+  <p class="intro">Inter for everything; JetBrains Mono strictly for evidence (URLs, errors, statuses). Numbers-first hierarchy: stats loud, labels quiet.</p>
+  <div class="card">
+    <div class="spec-row"><div class="label"><div class="tok">display</div><div class="val">Inter 32/700 · -0.02em</div></div><div style="font:var(--type-display);letter-spacing:var(--type-display-ls)">Catch issues before clients do</div></div>
+    <div class="spec-row"><div class="label"><div class="tok">h1</div><div class="val">Inter 24/600 · -0.01em</div></div><div style="font:var(--type-h1);letter-spacing:var(--type-h1-ls)">Scan results — example.com</div></div>
+    <div class="spec-row"><div class="label"><div class="tok">h2</div><div class="val">Inter 18/600 · -0.01em</div></div><div style="font:var(--type-h2);letter-spacing:var(--type-h2-ls)">Pages checked</div></div>
+    <div class="spec-row"><div class="label"><div class="tok">h3</div><div class="val">Inter 15/600</div></div><div style="font:var(--type-h3)">Visual changes on /services</div></div>
+    <div class="spec-row"><div class="label"><div class="tok">body</div><div class="val">Inter 14/400 · 1.55</div></div><div style="font:var(--type-body)">The site appears stable after the update. One minor spacing change was detected on the Services page and has been flagged for review.</div></div>
+    <div class="spec-row"><div class="label"><div class="tok">body-strong</div><div class="val">Inter 14/600</div></div><div style="font:var(--type-body-strong)">Contact form still detected — 5 fields, submit button present.</div></div>
+    <div class="spec-row"><div class="label"><div class="tok">caption</div><div class="val">Inter 12/500 · +0.01em</div></div><div style="font:var(--type-caption);letter-spacing:var(--type-caption-ls);color:var(--color-on-surface-secondary)">LAST SCANNED 2 HOURS AGO</div></div>
+    <div class="spec-row"><div class="label"><div class="tok">stat</div><div class="val">Inter 28/700 · -0.02em</div></div><div style="font:var(--type-stat);letter-spacing:var(--type-stat-ls)">8 pages · 0 critical</div></div>
+    <div class="spec-row"><div class="label"><div class="tok">mono</div><div class="val">JetBrains Mono 13/400</div></div><div style="font:var(--type-mono)">GET /contact → 200 · Uncaught TypeError: fm.init is not a function</div></div>
+  </div>
+</section>
+
+<section id="spacing">
+  <h2>Spacing</h2>
+  <p class="intro">8px rhythm with a 4px half-step. Generous outside (24px card padding, 24px gutters), compact inside (12px row rhythm).</p>
+  <div class="card">
+    <div class="space-row"><div class="tok">space-1 · 4px</div><div class="space-bar" style="width:4px"></div></div>
+    <div class="space-row"><div class="tok">space-2 · 8px</div><div class="space-bar" style="width:8px"></div></div>
+    <div class="space-row"><div class="tok">space-3 · 12px</div><div class="space-bar" style="width:12px"></div></div>
+    <div class="space-row"><div class="tok">space-4 · 16px</div><div class="space-bar" style="width:16px"></div></div>
+    <div class="space-row"><div class="tok">space-5 · 24px</div><div class="space-bar" style="width:24px"></div></div>
+    <div class="space-row"><div class="tok">space-6 · 32px</div><div class="space-bar" style="width:32px"></div></div>
+    <div class="space-row"><div class="tok">space-7 · 48px</div><div class="space-bar" style="width:48px"></div></div>
+    <div class="space-row"><div class="tok">space-8 · 64px</div><div class="space-bar" style="width:64px"></div></div>
+  </div>
+</section>
+
+<section id="radius">
+  <h2>Radius</h2>
+  <p class="intro">Rounded but composed: lg for cards and banners, md for controls, sm for thumbnails and code, full for pills.</p>
+  <div class="radius-grid">
+    <div class="radius-box" style="border-radius:var(--rounded-sm)"><span class="tok">sm</span><span class="val">6px</span></div>
+    <div class="radius-box" style="border-radius:var(--rounded-md)"><span class="tok">md</span><span class="val">10px</span></div>
+    <div class="radius-box" style="border-radius:var(--rounded-lg)"><span class="tok">lg</span><span class="val">16px</span></div>
+    <div class="radius-box" style="border-radius:var(--rounded-full)"><span class="tok">full</span><span class="val">999px</span></div>
+  </div>
+</section>
+
+<section id="elevation">
+  <h2>Elevation &amp; Depth</h2>
+  <p class="intro">Essentially flat: contrast + hairlines for structure, whisper shadow on cards, real shadow only on overlays.</p>
+  <div class="elev-grid">
+    <div class="elev-card" style="border:1px solid var(--color-border)"><div style="font:var(--type-h3)">Border only</div><div style="font:var(--type-caption);color:var(--color-on-surface-muted)">1px border · inline elements, wells</div></div>
+    <div class="elev-card" style="border:1px solid var(--color-border);box-shadow:var(--shadow-card)"><div style="font:var(--type-h3)">Card</div><div style="font:var(--type-caption);color:var(--color-on-surface-muted)">border + 0 1px 2px rgba(22,24,29,.05)</div></div>
+    <div class="elev-card" style="box-shadow:var(--shadow-overlay)"><div style="font:var(--type-h3)">Overlay</div><div style="font:var(--type-caption);color:var(--color-on-surface-muted)">0 8px 30px rgba(22,24,29,.12) · modals, popovers, toasts</div></div>
+  </div>
+</section>
+
+<section id="components">
+  <h2>Components</h2>
+
+  <div class="comp-block card">
+    <h3>Buttons</h3>
+    <div class="comp-row">
+      <div><button class="btn btn-primary">Run scan</button><span class="state-label">button-primary</span></div>
+      <div><button class="btn btn-primary is-hover">Run scan</button><span class="state-label">hover</span></div>
+      <div><button class="btn btn-primary" disabled>Run scan</button><span class="state-label">disabled</span></div>
+      <div><button class="btn btn-primary" style="outline:2px solid var(--color-focus-ring);outline-offset:2px">Run scan</button><span class="state-label">focus</span></div>
+      <div><button class="btn btn-secondary">View report</button><span class="state-label">button-secondary</span></div>
+      <div><button class="btn btn-secondary is-hover">View report</button><span class="state-label">hover</span></div>
+    </div>
+  </div>
+
+  <div class="comp-block card">
+    <h3>Input</h3>
+    <div class="comp-row">
+      <div><input class="input" placeholder="https://client-site.com"><span class="state-label">input-text</span></div>
+      <div><input class="input is-focus" value="https://client-site.com"><span class="state-label">focus</span></div>
+      <div><input class="input is-error" value="not-a-url"><div class="input-error-msg">We couldn't reach this site.</div><span class="state-label">error</span></div>
+    </div>
+  </div>
+
+  <div class="comp-block card">
+    <h3>Severity badges — always icon/dot + label, never color alone</h3>
+    <div class="comp-row">
+      <span class="badge badge-critical"><span class="dot"></span>Critical</span>
+      <span class="badge badge-high"><span class="dot"></span>High</span>
+      <span class="badge badge-medium"><span class="dot"></span>Medium</span>
+      <span class="badge badge-low"><span class="dot"></span>Low</span>
+      <span class="badge badge-info"><span class="dot"></span>Info</span>
+      <span class="badge badge-pass"><span class="dot"></span>Pass</span>
+      <span class="chip">8 of 25 pages</span>
+    </div>
+  </div>
+
+  <div class="comp-block card">
+    <h3>Verdict banners</h3>
+    <div class="banner banner-pass">✓&nbsp; No issues found — 8 pages checked</div>
+    <div class="banner banner-review">◐&nbsp; Needs review — 2 changes flagged</div>
+    <div class="banner banner-fail">✗&nbsp; Issues found — contact form no longer detected</div>
+  </div>
+
+  <div class="comp-block card">
+    <h3>Navigation &amp; feature card</h3>
+    <div class="comp-row" style="align-items:flex-start">
+      <div>
+        <div class="nav-demo">
+          <div class="nav-item active">Dashboard</div>
+          <div class="nav-item">Sites</div>
+          <div class="nav-item">Reports</div>
+          <div class="nav-item">Billing</div>
+        </div>
+        <span class="state-label">nav-item / nav-item-active</span>
+      </div>
+      <div>
+        <div class="card-feature">
+          <div class="cap">LAST SCAN — TODAY 14:32</div>
+          <div class="stat">0 critical issues</div>
+          <div style="font:var(--type-body);opacity:.85;margin-top:var(--space-2)">8 pages verified after plugin updates.</div>
+        </div>
+        <span class="state-label">card-feature — max one per screen</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="comp-block card">
+    <h3>Evidence (mono)</h3>
+    <div class="mono-demo">GET /contact → 200 OK<br>console: Uncaught TypeError: fm.init is not a function (contact-form.js:12)</div>
+  </div>
+
+  <div class="comp-block">
+    <h3 style="font:var(--type-h3);margin-bottom:var(--space-3)">report-document — the client receipt</h3>
+    <div class="report-doc">
+      <h4>WordPress Maintenance QA Receipt</h4>
+      <div class="date">example.com · July 2, 2026</div>
+      <p>We completed a post-update QA scan for your website and checked the most important pages for layout, form, link, and technical issues.</p>
+      <ul>
+        <li>8 pages checked</li>
+        <li>0 critical issues found</li>
+        <li>Contact form still detected</li>
+        <li>No major JavaScript errors found</li>
+      </ul>
+      <p style="color:var(--color-on-surface-secondary)">One minor spacing change was detected on the Services page and has been flagged for review. No urgent action is required.</p>
+      <div class="foot">QA by SiteOps QA</div>
+    </div>
+  </div>
+</section>
+
+<section id="dos-donts">
+  <h2>Do's and Don'ts</h2>
+  <div class="dd-grid">
+    <div class="dd-col do card">
+      <h3 style="color:var(--color-severity-pass)">✓ Do</h3>
+      <ul>
+        <li>Keep one primary button per view — the next step should be unambiguous.</li>
+        <li>Pair every severity color with its icon and label.</li>
+        <li>Use mono for all technical evidence — URLs, errors, statuses.</li>
+        <li>Lead result screens with the verdict banner and stat numbers.</li>
+        <li>Keep the public report page document-plain — it represents the agency.</li>
+      </ul>
+    </div>
+    <div class="dd-col dont card">
+      <h3 style="color:var(--color-severity-critical)">✗ Don't</h3>
+      <ul>
+        <li>Use severity colors decoratively (no red delete buttons).</li>
+        <li>Introduce new hues, gradients, or improvised dark modes.</li>
+        <li>Animate attention — no pulse, shake, or bounce on findings.</li>
+        <li>Fill idle space with decorative charts or stat wallpaper.</li>
+        <li>Put more than one blue feature card on a screen.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</div>
+</body>
+</html>
