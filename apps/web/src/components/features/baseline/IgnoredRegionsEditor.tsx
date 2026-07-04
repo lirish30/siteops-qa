@@ -2,7 +2,7 @@
 
 /* eslint-disable @next/next/no-img-element -- signed URLs are short-lived; next/image caching hurts here */
 
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { IgnoredRegion } from "@siteops/shared";
 import { Button } from "@/components/ui/button";
@@ -41,6 +41,24 @@ export function IgnoredRegionsEditor({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const imgRef = useRef<HTMLImageElement>(null);
+
+  // Callback ref instead of onLoad alone: cached images can finish loading
+  // before React attaches the load handler, which would leave sizes null and
+  // make drawing silently do nothing. Must be stable (useCallback) and only
+  // set changed values — a fresh ref re-runs on every render.
+  const syncSizes = useCallback((img: HTMLImageElement) => {
+    const next = { w: img.naturalWidth, h: img.naturalHeight };
+    setNaturalSize((prev) => (prev?.w === next.w && prev?.h === next.h ? prev : next));
+    const disp = { w: img.clientWidth, h: img.clientHeight };
+    setDisplaySize((prev) => (prev?.w === disp.w && prev?.h === disp.h ? prev : disp));
+  }, []);
+  const attachImg = useCallback(
+    (node: HTMLImageElement | null) => {
+      imgRef.current = node;
+      if (node?.complete && node.naturalWidth > 0) syncSizes(node);
+    },
+    [syncSizes]
+  );
 
   const src = screenshots[viewport];
 
@@ -83,7 +101,11 @@ export function IgnoredRegionsEditor({
   function handlePointerDown(e: React.PointerEvent) {
     if (!imgRef.current || !naturalSize) return;
     e.preventDefault();
-    (e.target as Element).setPointerCapture?.(e.pointerId);
+    try {
+      (e.target as Element).setPointerCapture?.(e.pointerId);
+    } catch {
+      // Inactive pointer (e.g. synthetic events) — capture is best-effort.
+    }
     const { x, y } = pointerPos(e);
     setDraft({ startX: x, startY: y, x, y, width: 0, height: 0 });
   }
@@ -170,21 +192,12 @@ export function IgnoredRegionsEditor({
               onPointerUp={handlePointerUp}
             >
               <img
-                ref={imgRef}
+                ref={attachImg}
                 src={src}
                 alt={`Baseline screenshot, ${viewport} — drag to ignore a region`}
                 draggable={false}
                 className="w-full"
-                onLoad={(e) => {
-                  setNaturalSize({
-                    w: e.currentTarget.naturalWidth,
-                    h: e.currentTarget.naturalHeight,
-                  });
-                  setDisplaySize({
-                    w: e.currentTarget.clientWidth,
-                    h: e.currentTarget.clientHeight,
-                  });
-                }}
+                onLoad={(e) => syncSizes(e.currentTarget)}
               />
               {viewportRegions.map((region, i) => {
                 const pos = naturalToDisplayed(region);
