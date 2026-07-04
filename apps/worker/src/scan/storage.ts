@@ -53,3 +53,10 @@ export async function storeScreenshot(
 
   return { path, thumbPath, bytes: png.byteLength + thumb.byteLength };
 }
+
+/** Download a stored screenshot (baseline PNGs for diffing). Throws on failure. */
+export async function downloadScreenshot(path: string): Promise<Buffer> {
+  const { data, error } = await supabase.storage.from(SCREENSHOTS_BUCKET).download(path);
+  if (error || !data) throw new Error(`screenshot download failed for ${path}: ${error?.message}`);
+  return Buffer.from(await data.arrayBuffer());
+}

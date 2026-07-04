@@ -8,6 +8,8 @@ import {
   baselinePageRetry,
   baselineWatchdog,
 } from "./inngest/functions/baseline-create";
+import { scanRun, scanWatchdog } from "./inngest/functions/scan-run";
+import { rebaselineFromScan } from "./inngest/functions/rebaseline";
 
 const app = express();
 app.use(express.json());
@@ -16,7 +18,15 @@ app.use(
   "/api/inngest",
   serve({
     client: inngest,
-    functions: [healthPing, baselineCreate, baselinePageRetry, baselineWatchdog],
+    functions: [
+      healthPing,
+      baselineCreate,
+      baselinePageRetry,
+      baselineWatchdog,
+      scanRun,
+      scanWatchdog,
+      rebaselineFromScan,
+    ],
   })
 );
 

@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Chip } from "@/components/ui/badge";
+import { RunScanButton } from "@/components/features/scans/RunScanModal";
 
 export function SiteHeader({
   site,
@@ -35,12 +35,11 @@ export function SiteHeader({
         >
           Edit pages
         </Link>
-        <Button
+        <RunScanButton
+          siteId={site.id}
           disabled={!hasBaseline}
-          title={hasBaseline ? undefined : "Create a baseline first"}
-        >
-          Run scan
-        </Button>
+          disabledReason="Create a baseline first"
+        />
       </div>
     </div>
   );

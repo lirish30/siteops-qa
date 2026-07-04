@@ -28,6 +28,11 @@ export interface PageCaptureOutput {
   missingImages: string[];
   screenshotBytes: number;
   durationMs: number;
+  /**
+   * Raw PNGs for same-step visual diffing (scan.run). Never returned across
+   * an Inngest step boundary — step results serialize to JSON.
+   */
+  screenshots: { desktop: Buffer; mobile: Buffer };
 }
 
 /**
@@ -93,5 +98,6 @@ export async function runPageCapture(input: PageCaptureInput): Promise<PageCaptu
     missingImages,
     screenshotBytes: desktopStored.bytes + mobileStored.bytes,
     durationMs: Date.now() - startedAt,
+    screenshots: { desktop: desktop.screenshot, mobile: mobile.screenshot },
   };
 }
