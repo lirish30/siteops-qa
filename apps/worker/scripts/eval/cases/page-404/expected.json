@@ -1,0 +1,1 @@
+{"name":"page 404","expected":[{"type":"page_404","severity":"critical"},{"type":"title_changed","severity":"medium"},{"type":"meta_description_missing","severity":"medium"},{"type":"h1_changed","severity":"medium"}]}

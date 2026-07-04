@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Chip } from "@/components/ui/badge";
 import { SiteHeader } from "@/components/features/sites/SiteHeader";
 import { BaselineStatusCard } from "@/components/features/sites/BaselineStatusCard";
+import { ScanHistoryList } from "@/components/features/sites/ScanHistoryList";
 
 export const metadata = { title: "Site overview — SiteOps QA" };
 
@@ -117,6 +118,8 @@ export default async function SiteOverviewPage({
           </Card>
         )}
       </section>
+
+      {hasBaseline && <ScanHistoryList siteId={site.id} />}
     </main>
   );
 }

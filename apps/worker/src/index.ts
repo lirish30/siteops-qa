@@ -9,6 +9,7 @@ import {
   baselineWatchdog,
 } from "./inngest/functions/baseline-create";
 import { scanRun, scanWatchdog } from "./inngest/functions/scan-run";
+import { rebaselineFromScan } from "./inngest/functions/rebaseline";
 
 const app = express();
 app.use(express.json());
@@ -24,6 +25,7 @@ app.use(
       baselineWatchdog,
       scanRun,
       scanWatchdog,
+      rebaselineFromScan,
     ],
   })
 );

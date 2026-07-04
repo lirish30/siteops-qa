@@ -1,0 +1,1 @@
+{"name":"page 500","expected":[{"type":"page_5xx","severity":"critical"},{"type":"title_changed","severity":"medium"},{"type":"meta_description_missing","severity":"medium"},{"type":"h1_changed","severity":"medium"}]}
