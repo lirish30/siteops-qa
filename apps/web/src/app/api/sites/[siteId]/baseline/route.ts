@@ -68,7 +68,8 @@ export async function POST(_request: Request, { params }: Params) {
       name: "app/baseline.requested",
       data: { siteId, scanId: scan.id },
     });
-  } catch {
+  } catch (error) {
+    console.error("Failed to send baseline request to Inngest", error);
     // Don't leave a stuck queued row if the event never made it out.
     await supabase.from("scans").update({ status: "failed" }).eq("id", scan.id);
     return NextResponse.json(

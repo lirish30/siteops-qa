@@ -46,9 +46,17 @@ export async function POST(request: Request, { params }: Params) {
     );
   }
 
-  await inngest.send({
-    name: "app/baseline.page-retry",
-    data: { siteId: scan.site_id, scanId, pageId },
-  });
+  try {
+    await inngest.send({
+      name: "app/baseline.page-retry",
+      data: { siteId: scan.site_id, scanId, pageId },
+    });
+  } catch (error) {
+    console.error("Failed to send baseline page retry to Inngest", error);
+    return NextResponse.json(
+      { error: "We couldn't reach the scan service. Try again in a minute." },
+      { status: 502 }
+    );
+  }
   return NextResponse.json({ ok: true }, { status: 202 });
 }

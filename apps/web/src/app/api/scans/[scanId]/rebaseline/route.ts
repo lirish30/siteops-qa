@@ -57,7 +57,8 @@ export async function POST(_request: Request, { params }: Params) {
       name: "app/scan.rebaseline",
       data: { scanId, siteId: scan.site_id },
     });
-  } catch {
+  } catch (error) {
+    console.error("Failed to send rebaseline request to Inngest", error);
     return NextResponse.json(
       { error: "We couldn't reach the scan service. Try again in a minute." },
       { status: 502 }
