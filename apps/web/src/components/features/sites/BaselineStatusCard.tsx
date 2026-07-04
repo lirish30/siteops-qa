@@ -87,8 +87,14 @@ export function BaselineStatusCard({
   async function handleCreate() {
     setBusy(true);
     setError(null);
-    const res = await fetch(`/api/sites/${siteId}/baseline`, { method: "POST" });
+    const res = await fetch(`/api/sites/${siteId}/baseline`, { method: "POST" }).catch(
+      () => null
+    );
     setBusy(false);
+    if (!res) {
+      setError("We couldn't reach the scan service. Try again in a minute.");
+      return;
+    }
     if (res.status === 202) {
       const body = (await res.json()) as { scanId: string };
       refreshedRef.current = false;
@@ -102,11 +108,17 @@ export function BaselineStatusCard({
 
   async function handleRetryPage(pageId: string) {
     if (!scanId) return;
-    await fetch(`/api/scans/${scanId}/retry-page`, {
+    setError(null);
+    const res = await fetch(`/api/scans/${scanId}/retry-page`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ pageId }),
-    });
+    }).catch(() => null);
+    if (!res || res.status !== 202) {
+      const body = (await res?.json().catch(() => null)) as { error?: string } | null;
+      setError(body?.error ?? "We couldn't retry that page. Try again.");
+      return;
+    }
     // The poll loop picks up the real state; nudge locally for feedback and
     // restart polling (a failed scan stops the loop).
     setScan((prev) =>
@@ -172,10 +184,16 @@ export function BaselineStatusCard({
         </div>
         {!running && scan?.status === "failed" && (
           <Button onClick={handleCreate} disabled={busy} variant="secondary">
-            Retry baseline
+            {busy ? "Starting..." : "Retry baseline"}
           </Button>
         )}
       </div>
+
+      {error && (
+        <p role="status" className="text-xs text-severity-critical">
+          {error}
+        </p>
+      )}
 
       {scan && scan.pagesTotal > 0 && (
         <Progress
