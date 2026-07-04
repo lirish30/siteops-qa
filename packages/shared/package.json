@@ -7,7 +7,8 @@
   "types": "src/index.ts",
   "exports": {
     ".": "./src/index.ts",
-    "./database.types": "./src/database.types.ts"
+    "./database.types": "./src/database.types.ts",
+    "./safe-fetch": "./src/safe-fetch.ts"
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --noEmit"

@@ -5,3 +5,4 @@ export * from "./issues";
 export * from "./schemas/org";
 export * from "./schemas/site";
 export * from "./schemas/pages";
+export * from "./storage-paths";

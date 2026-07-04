@@ -53,6 +53,7 @@ export type Database = {
           mobile_screenshot_path: string | null
           page_id: string
           page_title: string | null
+          scan_id: string | null
           site_id: string
           status: string
           wp_signals: Json
@@ -75,6 +76,7 @@ export type Database = {
           mobile_screenshot_path?: string | null
           page_id: string
           page_title?: string | null
+          scan_id?: string | null
           site_id: string
           status?: string
           wp_signals?: Json
@@ -97,6 +99,7 @@ export type Database = {
           mobile_screenshot_path?: string | null
           page_id?: string
           page_title?: string | null
+          scan_id?: string | null
           site_id?: string
           status?: string
           wp_signals?: Json
@@ -114,6 +117,13 @@ export type Database = {
             columns: ["site_id"]
             isOneToOne: false
             referencedRelation: "sites"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "baselines_scan_id_fkey"
+            columns: ["scan_id"]
+            isOneToOne: false
+            referencedRelation: "scans"
             referencedColumns: ["id"]
           },
         ]
@@ -618,6 +628,14 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      increment_scan_pages_done: {
+        Args: { p_scan_id: string }
+        Returns: undefined
+      }
+      set_current_baseline: {
+        Args: { p_baseline_id: string; p_page_id: string }
+        Returns: undefined
       }
       user_org_ids: { Args: never; Returns: string[] }
     }
