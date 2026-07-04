@@ -24,3 +24,11 @@ export const ISSUE_TYPES = [
 export type IssueType = (typeof ISSUE_TYPES)[number];
 
 export type IssueStatus = "open" | "expected" | "resolved" | "dismissed";
+
+/**
+ * Issues that count toward verdicts, severity chips, and reports (US-005):
+ * expected/resolved/dismissed issues are excluded everywhere counts are shown.
+ */
+export function openIssues<T extends { status: string }>(issues: readonly T[]): T[] {
+  return issues.filter((issue) => issue.status === "open");
+}
